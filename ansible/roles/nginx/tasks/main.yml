@@ -1,0 +1,20 @@
+---
+- name: Install Nginx
+  docker_image: "{{ nginx_docker_image }}"
+  docker_tag: "{{ nginx_docker_tag }}"
+  docker_pull: always
+  docker_state: present
+  when: nginx_install
+
+- name: Update Nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: "{{ nginx_config_path }}"
+  notify:
+  - Reload Nginx
+
+- name: Start Nginx
+  service:
+    name: nginx
+    state: started
+  when: nginx_install

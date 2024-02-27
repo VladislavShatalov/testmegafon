@@ -1,0 +1,34 @@
+---
+- name: Test HTTP requests on all server blocks
+  uri:
+    url: "http://{{ nginx_server_names[0] }}/"
+    follow_redirects: no
+    return_codes:
+      - 200
+    register: http_response_0
+
+  when: nginx_install
+
+- name: Assert HTTP response code is 200 for server block 1
+  assert:
+    that:
+      - http_response_0.status == 200
+
+  when: nginx_install
+
+- name: Test HTTP requests on all server blocks
+  uri:
+    url: "http://{{ nginx_server_names[1] }}/"
+    follow_redirects: no
+    return_codes:
+      - 200
+    register: http_response_1
+
+  when: nginx_install
+
+- name: Assert HTTP response code is 200 for server block 2
+  assert:
+    that:
+      - http_response_1.status == 200
+
+  when: nginx_install
